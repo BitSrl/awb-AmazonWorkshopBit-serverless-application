@@ -1,0 +1,385 @@
+openapi: 3.0.1
+info:
+  title: Swagger Workshop
+  description: 'This swagger describes the API used to manage Bit Workshops'
+  version: 1.0.0
+tags:
+- name: Workshop Manager
+  description: Everything about workshops
+paths:
+  /v1/workshops:
+    options:
+      tags:
+      - Workshop Manager
+      responses:
+        200:
+          description: Response for CORS method
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+      security:
+        - api_key: []
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: '{"statusCode" : 200 }'
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,x-api-key,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Origin: "'http://localhost:8080'"
+            responseTemplates:
+              application/json: {}
+
+    get:
+      tags:
+      - Workshop Manager
+      summary: Get Workshops List
+      parameters:
+        - in: query
+          name: workshopId
+          schema:
+            type: string
+        - in: query
+          name: speakerId
+          schema:
+            type: string
+      responses:
+        200:
+          description: Retrieve Workshops
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetWorkshops'
+        405:
+          description: Invalid input
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        contentHandling: CONVERT_TO_TEXT
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        uri: 
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AWB_C001-stage_workshop_manager:awb/invocations
+      security:
+        - api_key: []
+    post:
+      tags:
+      - Workshop Manager
+      summary: Add a new workshop to the store
+      requestBody:
+        description: Workshop object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workshop'
+        required: true
+      responses:
+        200:
+          description: Workshop Added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddWorkshopApiResponse'
+        405:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        contentHandling: CONVERT_TO_TEXT
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        uri: 
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AWB_C001-stage_workshop_manager:awb/invocations
+      security:
+        - api_key: []
+  /v1/speaker/{speakerId}/workshop/{workshopId}:
+    options:
+      tags:
+      - Workshop Manager
+      parameters:
+        - in: path
+          name: speakerId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: workshopId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Response for CORS method
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+      security:
+        - api_key: []
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: '{"statusCode" : 200 }'
+        responses:
+          default:
+            statusCode: '200'
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,x-api-key,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST,PATCH,DELETE'"
+              method.response.header.Access-Control-Allow-Origin: "'http://localhost:8080'"
+            responseTemplates:
+              application/json: {}
+    patch:
+      tags:
+      - Workshop Manager
+      summary: Update workshop
+      parameters:
+        - in: path
+          name: speakerId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: workshopId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Workshop object that needs to be updated
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedWorkshop'
+        required: true
+      responses:
+        200:
+          description: Workshop Added
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessApiResponse'
+        405:
+          description: Invalid input
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        contentHandling: CONVERT_TO_TEXT
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        uri: 
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AWB_C001-stage_workshop_manager:awb/invocations
+      security:
+        - api_key: []
+    delete:
+      tags:
+      - Workshop Manager
+      summary: Delete workshop
+      parameters:
+        - in: path
+          name: speakerId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: workshopId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Workshop Added
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessApiResponse'
+        405:
+          description: Invalid input
+          headers:
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorApiResponse'
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        contentHandling: CONVERT_TO_TEXT
+        httpMethod: POST
+        passthroughBehavior: when_no_match
+        uri: 
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AWB_C001-stage_workshop_manager:awb/invocations
+      security:
+        - api_key: []
+
+
+components:
+  schemas:
+    Workshop:
+      required:
+      - workshopName
+      - speakerName
+      - workshopObjectives
+      type: object
+      properties:
+        workshopName:
+          type: string
+          example: AWS Serverless Fullstack Applications
+        speakerName:
+          type: string
+          example: Andrei Marius Diaconovici
+        workshopObjectives:
+          type: array
+          items:
+            type: object
+            properties:
+              objectiveName:
+                type: string
+              objectiveType:
+                type: string
+                enum: [IMPORTANT, VERY IMPORTANT, LESS IMPORTANT]
+    GetWorkshops:
+      type: array
+      items:
+        type: object
+        properties:
+          workshopId:
+            type: string
+          speakerId:
+            type: string
+          workshopName:
+            type: string
+            example: AWS Serverless Fullstack Applications
+          workshopObjectives:
+            type: array
+            items:
+              type: object
+              properties:
+                objectiveName:
+                  type: string
+                objectiveType:
+                  type: string
+                  enum: [IMPORTANT, VERY IMPORTANT, LESS IMPORTANT]
+          
+    AddWorkshopApiResponse:
+      type: object
+      properties:
+        workshopId:
+          type: string
+        speakerId:
+          type: string
+    UpdatedWorkshop:
+      type: object
+      properties:
+        workshopName:
+          type: string
+          example: AWS Serverless Fullstack Applications
+        speakerName:
+          type: string
+          example: Andrei Marius Diaconovici
+        workshopObjectives:
+          type: array
+          items:
+            type: object
+            properties:
+              objectiveName:
+                type: string
+              objectiveType:
+                type: string
+                enum: [IMPORTANT, VERY IMPORTANT, LESS IMPORTANT]
+    SuccessApiResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    ErrorApiResponse:
+      type: object
+      properties:
+        message:
+          type: string
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: x-api-key
+      in: header

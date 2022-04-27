@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "WorkshopsGetRequest",
+    "type": "object",
+    "properties": {
+        "queryString": {
+            "type": "object",
+            "properties": {
+                "workshopId": {
+                    "type": "string",
+                    "minLength": 40,
+                    "maxLength": 40,
+                    "pattern": "^[A-Za-z0-9 -]+$"
+                },
+                "speakerId": {
+                    "type": "string",
+                    "minLength": 40,
+                    "maxLength": 40,
+                    "pattern": "^[A-Za-z0-9 -]+$"
+                }
+            },
+            "additionalProperties": false
+        },
+        "pathParams": {},
+        "headers": {},
+        "requestBody": {}
+    },
+    "required": [
+    ],
+    "definitions": {}
+}
