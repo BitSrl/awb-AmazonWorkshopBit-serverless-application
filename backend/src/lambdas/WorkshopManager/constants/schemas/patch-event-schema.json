@@ -1,0 +1,78 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "WorkshopPatchRequest",
+    "type": "object",
+    "properties": {
+        "pathParams": {
+            "type": "object",
+            "properties": {
+                "workshopId": {
+                    "type": "string",
+                    "minLength": 40,
+                    "maxLength": 40,
+                    "pattern": "^[A-Za-z0-9 -]+$"
+                },
+                "speakerId": {
+                    "type": "string",
+                    "minLength": 40,
+                    "maxLength": 40,
+                    "pattern": "^[A-Za-z0-9 -]+$"
+                }
+            },
+            "required": [
+                "workshopId",
+                "speakerId"
+            ],
+            "additionalProperties": false
+        },
+        "requestBody": {
+            "type": "object",
+            "$ref": "#/definitions/WorkshopRequest"
+        },
+        "headers": {}
+    },
+    "required": [
+        "requestBody",
+        "pathParams"
+    ],
+    "definitions": {
+        "WorkshopRequest": {
+            "type": "object",
+            "description": "The request input body for the workshop",
+            "properties": {
+                "workshopName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 45,
+                    "pattern": "^[A-Za-z0-9 -]+$"
+                },
+                "speakerName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 45,
+                    "pattern": "^[A-Za-z0-9 -]+$"
+                },
+                "workshopObjectives": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "objectiveName": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 45,
+                                "pattern": "^[A-Za-z0-9 -]+$"
+                            },
+                            "objectiveType": {
+                                "type": "string",
+                                "enum": ["IMPORTANT", "VERY_IMPORTANT", "LESS_IMPORTANT"]
+                            }
+                        }
+                    }
+                }
+            },
+            "required": [],
+            "additionalProperties": false
+        }
+    }
+}

@@ -1,0 +1,85 @@
+<div *ngIf="loading" class="container-loading">
+    <h1>Loading...</h1>
+</div>
+<div class="container">
+    <h1 class="text-center" style="margin-top:30px; color: #06B0AB">Bit Workshops!</h1>
+  
+    <div class="container mt-5" style="border: 2px solid #06B0AB; padding: 15px; border-radius: 15px">
+  
+      <h5>Add Workshop!</h5>
+  
+  
+      <form [formGroup]="workshopForm" (ngSubmit)="onSubmitWorkshop()">
+        <div class="mb-3">
+          <label for="workshopName" class="form-label">Workshop Name</label>
+          <input type="text" class="form-control" id="exampleInputWorkshopName" aria-describedby="workshopNameHelp"
+            formControlName="workshopName" required>
+          <div id="workshopNameHelp" class="form-text">Example: AWS Serverless Applications.</div>
+        </div>
+        <div class="mb-3">
+          <label for="speakerName" class="form-label">Speaker Name</label>
+          <input type="text" class="form-control" id="exampleInputSpeakerName" aria-describedby="speakerNameHelp"
+            formControlName="speakerName" required>
+          <div id="speakerNameHelp" class="form-text">Example: Andrei Marius Diaconovici.</div>
+        </div>
+        <div class="mb-3">
+          <button class="btn btn-secondary" (click)="addWorkshopObjective()" type="button" style="margin-bottom: 5px;">Add
+            Workshop Objective</button>
+          <div formArrayName="workshopObjectives"
+            *ngFor="let workshopObjective of workshopObjectives.controls; let i=index">
+            <div formGroupName="{{i}}">
+              <div class="mb-3">
+                <label for="objectiveName" class="form-label">Objective Name</label>
+                <input type="text" class="form-control" id="exampleInputObjectiveName" aria-describedby="objectiveNameHelp"
+                  formControlName="objectiveName" required>
+                <div id="objectiveNameHelp" class="form-text">Example: AWS Certification Pratctitioner.</div>
+              </div>
+              <div class="mb-3">
+                <select class="form-select" aria-label="Objective type select" formControlName="objectiveType" required>
+                  <option disabled selected>Select objective type</option>
+                  <option value="IMPORTANT">IMPORTANT</option>
+                  <option value="LESS_IMPORTANT">LESS IMPORTANT</option>
+                  <option value="VERY_IMPORTANT">VERY IMPORTANT</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!workshopForm.valid">Submit</button>
+      </form>
+    </div>
+    <div class="container mt-5" style="border: 2px solid #06B0AB; padding:15px;">
+  
+      <h5>Workshops Available!</h5>
+  
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Speaker Name</th>
+            <th scope="col">Workshop Name</th>
+            <th scope="col">Workshop Objectives</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let workshop of workshops">
+            <th scope="row">1</th>
+            <td>{{workshop.speakerName}}</td>
+            <td>{{workshop.workshopName}}</td>
+            <td>
+              <ul>
+                <li *ngFor="let workshopObjective of workshop.workshopObjectives">{{workshopObjective.objectiveName}} - {{workshopObjective.objectiveType}}</li>
+              </ul>
+            </td>
+            <td>
+                <button class="btn btn-danger" (click)="deleteWorkshop(workshop.workshopId ?? '', workshop.speakerId ?? '')">Delete</button>
+                <button class="btn btn-warning" style="margin-left: 10px;" (click)="updateWorkshop(workshop)">Update</button>
+            </td>
+          </tr>
+  
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <br><br>
