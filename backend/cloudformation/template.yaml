@@ -13,8 +13,6 @@ Mappings:
       DynamoTableAwbWorkshopStoreDataRCU: '1'
       DynamoTableAwbWorkshopStoreDataWCU: '1'
 
-      ApiCorsAllowed: "'http://localhost:8080'"
-
     prep:
       logLevel: 'info'
 
@@ -23,8 +21,6 @@ Mappings:
 
       DynamoTableAwbWorkshopStoreDataRCU: '1'
       DynamoTableAwbWorkshopStoreDataWCU: '1'
-
-      ApiCorsAllowed: "'prep.workshop.com'"
   
     prod:
       logLevel: 'error'
@@ -36,9 +32,10 @@ Mappings:
       DynamoTableAwbWorkshopStoreDataRCU: '5'
       DynamoTableAwbWorkshopStoreDataWCU: '5'
 
-      ApiCorsAllowed: "'prod.workshop.com'"
-
 Parameters:
+  ApiCorsAllowed:
+    Type: String
+    Description: CORS API
   Environment:
     Type: String
     Description: Name of the environment
@@ -146,7 +143,7 @@ Resources:
     DependsOn:
       - WorkshopManagerLambdaFunctionAliasawb
     Properties:
-      Name: "AWB.REST.API"
+      Name: !Sub "AWB.REST.API.${Environment}"
       Description: "This REST API is exposed to the angular application. It is used to configure workshops"
       EndpointConfiguration:
         Type: REGIONAL
@@ -155,11 +152,7 @@ Resources:
       Cors:
         AllowMethods: "'OPTIONS,GET,POST,PATCH,DELETE'"
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-        AllowOrigin: !FindInMap [
-          EnvMap,
-          !Ref Environment,
-          ApiCorsAllowed,
-        ]
+        AllowOrigin: !Ref ApiCorsAllowed
         MaxAge: "'600'"
       DefinitionBody:
         Fn::Transform:
@@ -170,7 +163,7 @@ Resources:
   AwbApiKey:
     Type: "AWS::ApiGateway::ApiKey"
     Properties:
-      Name: AWB.REST.API.APIKEY
+      Name: !Sub "AWB.REST.API.APIKEY.${Environment}"
       Description: API Key for the AWB.REST.API REST API
       Enabled: true
 
@@ -181,7 +174,7 @@ Resources:
         - ApiId: !Ref AwbApi
           Stage: !Ref Environment
       Description: AWB_BE UsagePlan
-      UsagePlanName: AWB_BE_BACKEND
+      UsagePlanName: !Sub "AWB_BE_BACKEND_${Environment}"
     DependsOn:
       - AwbApiStage
   AwbApiUsagePlanKey:
@@ -196,7 +189,7 @@ Resources:
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
     Properties:
-      TableName: "AWB_WORKSHOP_STORE_DATA"
+      TableName: !Sub "AWB_WORKSHOP_STORE_DATA_${Environment}"
       AttributeDefinitions:
         - AttributeName: "speakerId"
           AttributeType: "S"

@@ -31,7 +31,7 @@ export interface WorkshopUpdateRequest {
 
 export interface WorkshopObjective {
     objectiveName: string;
-    objectiveType: keyof ObjectiveType;
+    objectiveType: keyof typeof ObjectiveType;
 }
 
 export enum ObjectiveType {

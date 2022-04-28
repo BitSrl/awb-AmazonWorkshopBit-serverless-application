@@ -9,8 +9,9 @@ export class DynamoDBService {
             const dynamoDbClient = new AWS.DynamoDB.DocumentClient({
                 apiVersion: '2012-08-10'
             });
+            const env = process.env['stage'] ?? 'stage';
             const params: AWS.DynamoDB.DocumentClient.ScanInput = {
-                TableName: 'AWB_WORKSHOP_STORE_DATA'
+                TableName: 'AWB_WORKSHOP_STORE_DATA_'+env,
             };
             const response = await dynamoDbClient.scan(params).promise();
             return response.Items as IResponse.WorkshopResponse[];
@@ -24,8 +25,9 @@ export class DynamoDBService {
             const dynamoDbClient = new AWS.DynamoDB.DocumentClient({
                 apiVersion: '2012-08-10'
             });
+            const env = process.env['stage'] ?? 'stage';
             const params: AWS.DynamoDB.DocumentClient.QueryInput = {
-                TableName: 'AWB_WORKSHOP_STORE_DATA',
+                TableName: 'AWB_WORKSHOP_STORE_DATA_'+env,
                 KeyConditionExpression: '#speakerId = :speakerId',
                 ExpressionAttributeNames: {
                     '#speakerId': 'speakerId'
@@ -48,8 +50,9 @@ export class DynamoDBService {
             const dynamoDbClient = new AWS.DynamoDB.DocumentClient({
                 apiVersion: '2012-08-10'
             });
+            const env = process.env['stage'] ?? 'stage';
             const params: AWS.DynamoDB.DocumentClient.GetItemInput = {
-                TableName: 'AWB_WORKSHOP_STORE_DATA',
+                TableName: 'AWB_WORKSHOP_STORE_DATA_'+env,
                 Key: {
                     workshopId: workshopId,
                     speakerId: speakerId
@@ -69,8 +72,9 @@ export class DynamoDBService {
             const dynamoDbClient = new AWS.DynamoDB.DocumentClient({
                 apiVersion: '2012-08-10'
             });
+            const env = process.env['stage'] ?? 'stage';
             const params: AWS.DynamoDB.DocumentClient.PutItemInput = {
-                TableName: 'AWB_WORKSHOP_STORE_DATA',
+                TableName: 'AWB_WORKSHOP_STORE_DATA_'+env,
                 Item: workshop,
                 ReturnConsumedCapacity: 'TOTAL'
             }
@@ -91,8 +95,9 @@ export class DynamoDBService {
             const dynamoDbClient = new AWS.DynamoDB.DocumentClient({
                 apiVersion: '2012-08-10'
             });
+            const env = process.env['stage'] ?? 'stage';
             const params: AWS.DynamoDB.DocumentClient.DeleteItemInput = {
-                TableName: 'AWB_WORKSHOP_STORE_DATA',
+                TableName: 'AWB_WORKSHOP_STORE_DATA_'+env,
                 Key: {
                     workshopId: workshopId,
                     speakerId: speakerId

@@ -24,8 +24,6 @@ paths:
             Access-Control-Allow-Origin:
               schema:
                 type: string
-      security:
-        - api_key: []
       x-amazon-apigateway-integration:
         type: mock
         requestTemplates:
@@ -36,7 +34,8 @@ paths:
             responseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,x-api-key,X-Api-Key,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST,PATCH,DELETE'"
-              method.response.header.Access-Control-Allow-Origin: "'http://localhost:8080'"
+              method.response.header.Access-Control-Allow-Origin: 
+                Fn::Sub: "${ApiCorsAllowed}"
             responseTemplates:
               application/json: {}
 
@@ -92,7 +91,7 @@ paths:
         httpMethod: POST
         passthroughBehavior: when_no_match
         uri: 
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AWB_C001-stage_workshop_manager:awb/invocations
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AWB_C001-${Environment}_workshop_manager:awb/invocations
       security:
         - api_key: []
     post:
@@ -125,10 +124,10 @@ paths:
         httpMethod: POST
         passthroughBehavior: when_no_match
         uri: 
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AWB_C001-stage_workshop_manager:awb/invocations
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AWB_C001-${Environment}_workshop_manager:awb/invocations
       security:
         - api_key: []
-  /v1/speaker/{speakerId}/workshop/{workshopId}:
+  /v1/speakers/{speakerId}/workshops/{workshopId}:
     options:
       tags:
       - Workshop Manager
@@ -156,8 +155,6 @@ paths:
             Access-Control-Allow-Origin:
               schema:
                 type: string
-      security:
-        - api_key: []
       x-amazon-apigateway-integration:
         type: mock
         requestTemplates:
@@ -168,7 +165,8 @@ paths:
             responseParameters:
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,x-api-key,X-Api-Key,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST,PATCH,DELETE'"
-              method.response.header.Access-Control-Allow-Origin: "'http://localhost:8080'"
+              method.response.header.Access-Control-Allow-Origin: 
+                Fn::Sub: "${ApiCorsAllowed}"
             responseTemplates:
               application/json: {}
     patch:
@@ -232,7 +230,7 @@ paths:
         httpMethod: POST
         passthroughBehavior: when_no_match
         uri: 
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AWB_C001-stage_workshop_manager:awb/invocations
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AWB_C001-${Environment}_workshop_manager:awb/invocations
       security:
         - api_key: []
     delete:
@@ -289,7 +287,7 @@ paths:
         httpMethod: POST
         passthroughBehavior: when_no_match
         uri: 
-          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AWB_C001-stage_workshop_manager:awb/invocations
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:AWB_C001-${Environment}_workshop_manager:awb/invocations
       security:
         - api_key: []
 
@@ -318,7 +316,7 @@ components:
                 type: string
               objectiveType:
                 type: string
-                enum: [IMPORTANT, VERY IMPORTANT, LESS IMPORTANT]
+                enum: [IMPORTANT, VERY_IMPORTANT, LESS_IMPORTANT]
     GetWorkshops:
       type: array
       items:
@@ -340,7 +338,7 @@ components:
                   type: string
                 objectiveType:
                   type: string
-                  enum: [IMPORTANT, VERY IMPORTANT, LESS IMPORTANT]
+                  enum: [IMPORTANT, VERY_IMPORTANT, LESS_IMPORTANT]
           
     AddWorkshopApiResponse:
       type: object
@@ -367,7 +365,7 @@ components:
                 type: string
               objectiveType:
                 type: string
-                enum: [IMPORTANT, VERY IMPORTANT, LESS IMPORTANT]
+                enum: [IMPORTANT, VERY_IMPORTANT, LESS_IMPORTANT]
     SuccessApiResponse:
       type: object
       properties:

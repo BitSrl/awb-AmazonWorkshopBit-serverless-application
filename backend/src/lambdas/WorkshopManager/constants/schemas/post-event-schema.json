@@ -45,7 +45,7 @@
                             },
                             "objectiveType": {
                                 "type": "string",
-                                "enum": ["IMPORTANT", "VERY IMPORTANT", "LESS IMPORTANT"]
+                                "enum": ["IMPORTANT", "VERY_IMPORTANT", "LESS_IMPORTANT"]
                             }
                         }
                     }
