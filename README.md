@@ -14,3 +14,9 @@ Backend Lambda Build:
 5) archive into dist.zip file
 6) s3 sync with your bucket
 7) deploy with your cloudformation template
+
+Frontend Build:
+1) npm install
+2) update / create env files
+3) npm run-script build
+4) manually upload dist folder to s3 
